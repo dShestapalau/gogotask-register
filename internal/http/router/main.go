@@ -11,5 +11,4 @@ func New(engine *gin.Engine, controllers *controller.Controller) {
 	{
 		routes.GET("/health", controllers.HealthController.Health)
 	}
-
 }
