@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/dshestapalau/gogotask/register/internal/config"
 	"github.com/dshestapalau/gogotask/register/internal/http/controller"
 	"github.com/dshestapalau/gogotask/register/internal/http/router"
 	utils "github.com/dshestapalau/gogotask/register/pkg/http"
@@ -8,6 +9,11 @@ import (
 )
 
 func NewHttpServer() {
+	config.Migrate()
+
+	dbConnection := config.OpenConnection()
+	defer config.CloseDatabaseConnection(dbConnection)
+
 	engine := gin.Default()
 
 	utils.RegisterValidationRules()
