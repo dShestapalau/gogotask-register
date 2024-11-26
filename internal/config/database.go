@@ -7,10 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func OpenConnection() *gorm.DB {
-	// DBProperties := pkg.NewDBProperties()
-
-	dsn := "postgres://dshestapalau:12345@localhost:5432/gogotask-profile"
+func OpenConnection(config Configuration) *gorm.DB {
+	dsn := createDsn(config)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
@@ -27,4 +25,8 @@ func CloseDatabaseConnection(db *gorm.DB) {
 		panic(err)
 	}
 	dbSQL.Close()
+}
+
+func createDsn(config Configuration) string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s", config.DatabaseUser, config.DatabasePassword, config.DatabaseHost, config.DatabasePort, config.DatabaseName)
 }

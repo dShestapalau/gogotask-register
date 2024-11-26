@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/dshestapalau/gogotask/register/internal/config"
 	"github.com/dshestapalau/gogotask/register/internal/http/controller"
 	"github.com/dshestapalau/gogotask/register/internal/http/router"
@@ -9,9 +11,12 @@ import (
 )
 
 func NewHttpServer() {
-	config.Migrate()
+	configuration := config.NewConfiguration()
+	configuration.LoadConfig()
 
-	dbConnection := config.OpenConnection()
+	fmt.Println(configuration)
+
+	dbConnection := config.OpenConnection(configuration)
 	defer config.CloseDatabaseConnection(dbConnection)
 
 	engine := gin.Default()
@@ -21,5 +26,5 @@ func NewHttpServer() {
 	controller := controller.NewController()
 	router.New(engine, controller)
 
-	engine.Run(":9000")
+	engine.Run(":" + configuration.ServerPort)
 }
