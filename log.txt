@@ -1,0 +1,10 @@
+[GIN-debug] Listening and serving HTTP on :9000
+
+2024/11/26 18:13:09 D:/taskmanager/register/internal/persistence/repository/user_credentials.go:27
+[5.188ms] [rows:1] INSERT INTO "user_profile" ("last_name","first_name","middle_name","locale","status","created_at","updated_at") VALUES ('','','','ru','CREATED','2024-11-26 18:13:09.688','2024-11-26 18:13:09.688') ON CONFLICT DO NOTHING RETURNING "id"
+
+2024/11/26 18:13:09 D:/taskmanager/register/internal/persistence/repository/user_credentials.go:27
+[21.050ms] [rows:1] INSERT INTO "user_credentials" ("user_id","login","password","created_at","updated_at") VALUES ('f59872e3-c5cd-4abd-9f01-4a3d0da9b93d','123','321','2024-11-26 18:13:09.694','2024-11-26 18:13:09.694')       
+2024/11/26 18:13:09 Failed to save data%!(EXTRA *gorm.DB=&{0xc000314240 <nil> 1 0xc00033e380 0})
+exit status 1
+make: *** [run] Error 1

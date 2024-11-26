@@ -1,11 +1,11 @@
 package app
 
 import (
-	"fmt"
-
 	"github.com/dshestapalau/gogotask/register/internal/config"
+	"github.com/dshestapalau/gogotask/register/internal/domain/service"
 	"github.com/dshestapalau/gogotask/register/internal/http/controller"
 	"github.com/dshestapalau/gogotask/register/internal/http/router"
+	"github.com/dshestapalau/gogotask/register/internal/persistence/repository"
 	utils "github.com/dshestapalau/gogotask/register/pkg/http"
 	"github.com/gin-gonic/gin"
 )
@@ -14,8 +14,6 @@ func NewHttpServer() {
 	configuration := config.NewConfiguration()
 	configuration.LoadConfig()
 
-	fmt.Println(configuration)
-
 	dbConnection := config.OpenConnection(configuration)
 	defer config.CloseDatabaseConnection(dbConnection)
 
@@ -23,7 +21,10 @@ func NewHttpServer() {
 
 	utils.RegisterValidationRules()
 
-	controller := controller.NewController()
+	userCredentialsRepository := repository.NewUserCredentialsRepository(dbConnection)
+	userService := service.NewUserService(userCredentialsRepository)
+
+	controller := controller.NewController(userService)
 	router.New(engine, controller)
 
 	engine.Run(":" + configuration.ServerPort)

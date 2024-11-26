@@ -10,5 +10,6 @@ func New(engine *gin.Engine, controllers *controller.Controller) {
 
 	{
 		routes.GET("/health", controllers.HealthController.Health)
+		routes.POST("/create", controllers.UserController.Create)
 	}
 }
