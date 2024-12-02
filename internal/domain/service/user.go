@@ -9,6 +9,7 @@ import (
 type (
 	UserService interface {
 		CreateUser(userCredentials model.UserCredentials) model.UserCredentials
+		FindByLogin(userCredentials model.UserCredentials) model.UserCredentials
 	}
 
 	userService struct {
@@ -23,7 +24,6 @@ func NewUserService(userCredentialsRepository repository.UserCredentialsReposito
 }
 
 func (service *userService) CreateUser(userCredentials model.UserCredentials) model.UserCredentials {
-
 	savedUserProfile := entity.UserProfile{
 		Locale: "ru",
 		Status: "CREATED",
@@ -38,4 +38,16 @@ func (service *userService) CreateUser(userCredentials model.UserCredentials) mo
 	service.userCredentialsRepository.Save(credentials)
 
 	return model.UserCredentials{}
+}
+
+func (service *userService) FindByLogin(userCredentials model.UserCredentials) model.UserCredentials {
+
+	savedUser := service.userCredentialsRepository.FindByLogin(userCredentials.Login)
+
+	return model.UserCredentials{
+		UserId:    savedUser.UserID,
+		Login:     savedUser.Login,
+		CreatedAt: savedUser.CreatedAt,
+		UpdatedAt: savedUser.UpdatedAt,
+	}
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/dshestapalau/gogotask/register/internal/domain/service"
 	"github.com/dshestapalau/gogotask/register/internal/http/message/request"
 	"github.com/dshestapalau/gogotask/register/internal/http/message/response"
+	utils "github.com/dshestapalau/gogotask/register/pkg/http"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -14,6 +15,7 @@ import (
 type (
 	UserController interface {
 		Create(ctx *gin.Context)
+		GetById(ctx *gin.Context)
 	}
 
 	userController struct {
@@ -32,7 +34,8 @@ func (controller *userController) Create(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 
-		ctx.JSON(400, gin.H{"error": err.Error()})
+		ctx.JSON(400, utils.HandleError(err))
+		return
 	}
 
 	controller.userService.CreateUser(model.UserCredentials{
@@ -45,4 +48,14 @@ func (controller *userController) Create(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, response)
+}
+
+func (controller *userController) GetById(ctx *gin.Context) {
+	login := ctx.Request.URL.Query().Get("login")
+
+	savedUser := controller.userService.FindByLogin(model.UserCredentials{
+		Login: login,
+	})
+
+	ctx.JSON(http.StatusOK, savedUser)
 }

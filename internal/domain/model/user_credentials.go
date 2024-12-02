@@ -12,6 +12,4 @@ type UserCredentials struct {
 	Password  string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-
-	UserProfile UserProfile
 }

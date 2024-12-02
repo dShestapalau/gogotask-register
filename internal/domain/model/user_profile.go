@@ -15,4 +15,6 @@ type UserProfile struct {
 	Status     string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
+
+	UserCredentials UserCredentials
 }
